@@ -19,24 +19,25 @@ gcloud compute instances create instance-1 \
 gcloud compute ssh --zone "northamerica-northeast1-a" "instance-1"  --project "bacalhau-355518"
 
 sudo apt update
-sudo apt install python-pip
-pip install gdown -y
+sudo apt install python-pip ffmpeg -y
+pip install gdown
 
 #40GB frigidaire video
 gdown https://drive.google.com/uc?id=17qdQ56Q8qecJo5AtvJtsGxtTvu71qdwn
-gsutil cp *.txt gs://my-bucket
+gsutil cp Fridgidaire_Final_001_4444HQ_4096x3072.mov gs://prelinger
 
 #wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1pUOOBK5NPh9OkVyP8ZxBNQRwuRMJ46yz' -O frigidaire.mov
 
 #290GB frigidaire video
-gdown https://drive.google.com/uc?id=1RudFMwYVuP9Nd8-StqXE81Gl_u2v9au7
+gdown https://drive.google.com/uc?id=1ygfi8CvcOXKZRkllOf4VXQoVthxKIf4X
+
+gcloud compute scp instance-1:/home/wes/Fridgidaire_Final_001_4444HQ.mp4 ./Fridgidaire_Final_001_4444HQ.mp4 
+
+#Convert
+ffmpeg -i my-video.mov -vcodec h264 -acodec mp2 my-video.mp4
+#ffmpeg -i Fridgidaire_Final_001_4444HQ_4096x3072.mov -vcodec h264 -acodec mp2 Fridgidaire_Final_001_4444HQ.mp4
 
 #Probe the file's resolutions
 ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 input.mp4
+ffmpeg -i Fridgidaire_Final_001_4444HQ_4096x3072.mov -vf scale=1400:1050 <encoding-parameters> Fridgidaire_Final_0011400x1050.mov
 
-ffmpeg -i input.mp4 -vf scale=$w:$h <encoding-parameters> output.mp4
-
-
-#https://ottverse.com/change-resolution-resize-scale-video-using-ffmpeg/
-#https://ffmpeg.org/ffmpeg.html
-#ffmpeg -i movie.mov -c:v libx264 -c:a copy -crf 20 newmovie.mov
