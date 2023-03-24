@@ -36,6 +36,45 @@ gcloud compute scp instance-1:/home/wes/Fridgidaire_Final_001_4444HQ_1400x1050.m
 
 
 
+#Scale with ffmpeg - Local Docker Test
+#docker run --rm -it -v $PWD/inputs:/inputs --entrypoint /bin/bash linuxserver/ffmpeg 
+export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_small.mov
+export OUTPUTFILENAME=Fridgidaire_Final_001_4444HQ_smallerer.mov
+docker run --rm -v $PWD/inputs:/inputs \
+    linuxserver/ffmpeg \
+    -i /inputs/${INPUTFILENAME} -vf scale=150:100 \
+    /outputs/${OUTPUTFILENAME}
+
+
+docker run --rm -it -v $PWD/inputs:/inputs --entrypoint /bin/bash linuxserver/ffmpeg 
+
+
+
+
+
+
+
+ffmpeg -i Fridgidaire_Final_001_4444HQ_4096x3072.mov -vf scale=1400:1050  Fridgidaire_Final_001_4444HQ_1400x1050.mov 
+
+
+#Object detection with Yolo
+--input-urls https://github.com/ultralytics/yolov5/releases/download/v6.2/yolov5s.pt \
+ultralytics/yolov5:v6.2 \
+-- /bin/bash -c 'find /inputs -type f -exec cp {} /outputs/yolov5s.pt \; ; python detect.py --weights /outputs/yolov5s.pt --source $(pwd)/data/images --project /outputs'
+
+#Easy OCR
+#https://docs.bacalhau.org/examples/model-inference/EasyOCR/
+--wait \
+jsacex/easyocr \
+--  easyocr -l ch_sim  en -f ./inputs/chinese.jpg --detail=1 --gpu=True
+
+
+
+
+
+
+
+
 #Convert
 #ffmpeg -i my-video.mov -vcodec h264 -acodec mp2 my-video.mp4
 #ffmpeg -i Fridgidaire_Final_001_4444HQ_4096x3072.mov -vcodec h264 -acodec mp2 Fridgidaire_Final_001_4444HQ.mp4
