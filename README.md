@@ -17,12 +17,12 @@ docker run --rm -v $PWD/inputs:/inputs -v $PWD/outputs:/outputs\
 
 Scale with ffmpeg - On Bacalhau
 ```
-# Inputs folder IPFS CID: bafybeiazxxfknpzdwkbkbgwwgrvnw5yr2zfn4d6iqjtxk5dkwm3sd5aexi
+# Inputs folder IPFS CID: ...
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
 export OUTPUTFILENAME=Fridgidaire_Final_001_4444HQ_150x100.mov
 
 bacalhau docker run \
-    -v bafybeiazxxfknpzdwkbkbgwwgrvnw5yr2zfn4d6iqjtxk5dkwm3sd5aexi:/inputs \
+    -v ...:/inputs \
     linuxserver/ffmpeg \
     -- -i /inputs/${INPUTFILENAME} -vf scale=150:100 \
     /outputs/${OUTPUTFILENAME}
