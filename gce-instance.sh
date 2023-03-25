@@ -19,8 +19,14 @@ gcloud compute instances create instance-1 \
 gcloud compute ssh --zone "northamerica-northeast1-a" "instance-1"  --project "bacalhau-355518"
 
 sudo apt update
-sudo apt install python-pip ffmpeg ffprobe -y
+sudo apt install ca-certificates curl gnupg python-pip ffmpeg docker -y
 pip install gdown
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh ./get-docker.sh
+sudo groupadd docker
+sudo usermod -aG docker ${USER}
+
 
 #40GB frigidaire video
 gdown https://drive.google.com/uc?id=17qdQ56Q8qecJo5AtvJtsGxtTvu71qdwn
