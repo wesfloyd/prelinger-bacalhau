@@ -16,7 +16,9 @@ gcloud compute instances create instance-1 \
     --labels=ec-src=vm_add-gcloud \
     --reservation-affinity=any
 
+gcloud compute instances start instance-1 --zone "northamerica-northeast1-a"
 gcloud compute ssh --zone "northamerica-northeast1-a" "instance-1"  --project "bacalhau-355518"
+gcloud compute instances stop instance-1 --zone "northamerica-northeast1-a"
 
 sudo apt update
 sudo apt install ca-certificates curl gnupg python-pip ffmpeg docker -y

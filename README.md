@@ -1,8 +1,8 @@
-# prelinger-tests
+# Prelinger Decentralized Video Processing Pipeline with Project Bacalhau
+https://archive.org/details/prelinger
+https://bacalhau.org/
 
-
-
-Scale with ffmpeg - Local Docker Test
+# Scale with ffmpeg - Local Docker Test
 ```
 #docker run --rm -it -v $PWD/inputs:/inputs --entrypoint /bin/bash linuxserver/ffmpeg 
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
@@ -15,7 +15,7 @@ docker run --rm -v $PWD/inputs:/inputs -v $PWD/outputs:/outputs\
 ```
 
 
-Scale with ffmpeg - On Bacalhau
+# Scale with ffmpeg - On Bacalhau
 ```
 # Inputs folder IPFS CID: bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
@@ -25,16 +25,31 @@ bacalhau docker run \
     -v bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy:/inputs \
     --id-only\
     linuxserver/ffmpeg \
-    -- -i /inputs/${INPUTFILENAME} -vf scale=150:100 \
+    -- ffmpeg -i /inputs/${INPUTFILENAME} -vf scale=150:100 \
     /outputs/${OUTPUTFILENAME}
 
-#Not yet working
+#todo fix - Not yet working
 
 ```
 
 
-# Export screenshot images every 5 seconds?
-ffmpeg -i input.mov -r 0.2 output_%04d.png
+# Export screenshot images every 5 seconds
+```
+# Local test
+export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
+export OUTPUTFILESTRING=output_%04d.jpg
+
+ffmpeg -i inputs/${INPUTFILENAME} -r 0.2 outputs/${OUTPUTFILESTRING}
+
+
+# Docker test
+# todo modify this to run on a Docker image
+
+## Bacalhau command
+
+# todo modify this to run on Bacalhau
+```
+
 
 
 
@@ -47,42 +62,45 @@ ffmpeg -i input.mov -r 0.2 output_%04d.png
 ```
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
 
-docker run -it --rm ultralytics/yolov5 /bin/bash
+# Local test
+pip install ultralytics
+git clone https://github.com/ultralytics/yolov5  # clone
+cd yolov5
+pip install -r requirements.txt
+pip install --force-reinstall -v "MySQL_python==1.2.2"
+pip3 install torch
+python detect.py --weights ../inputs/yolov5s-seg.pt --source ../outputs/output_0015.jpg 
+# not yet working
+
+docker run -it --rm -v  ultralytics/yolov5 /bin/bash
 
 # todo download this file: https://github.com/ultralytics/yolov5/releases/download/v7.0/yolov5n-seg.pt
+
+# todo: revisit the pipeline concept
 
 # example command from docs
 python segment/predict.py --weights yolov5m-seg.pt --data data/images/bus.jpg
 
-# docs https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data
+#code: https://github.com/ultralytics/yolov5/tree/master/segment
 
 
 --input-urls https://github.com/ultralytics/yolov5/releases/download/v6.2/yolov5s.pt \
 ultralytics/yolov5:v6.2 \
 -- /bin/bash -c 'find /inputs -type f -exec cp {} /outputs/yolov5s.pt \; ; python detect.py --weights /outputs/yolov5s.pt --source $(pwd)/data/images --project /outputs'
-
+```
 
 
 
 
 # Easy OCR
-https://docs.bacalhau.org/examples/model-inference/EasyOCR/
-
-```
-jsacex/easyocr \
---  easyocr -l ch_sim  en -f ./inputs/chinese.jpg --detail=1 --gpu=True
-
-```
+- Bacalhau example: https://docs.bacalhau.org/examples/model-inference/EasyOCR/
 
 
-
-
-```
 
 # Appendix
 
 #Convert
-#ffmpeg -i my-video.mov -vcodec h264 -acodec mp2 my-video.mp4
+#todo? ffmpeg -i my-video.mov -vcodec h264 -acodec mp2 my-video.mp4
 #Trim
 #ffmpeg -i input.mp4 -ss 00:05:20 -t 00:10:00 -c:v copy -c:a copy output1.mp4
 #Probe the file's resolutions
