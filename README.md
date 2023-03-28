@@ -31,17 +31,12 @@ bacalhau docker run \
 
 # Export screenshot images every 5 seconds
 ```bash
-# Local test
+# Docker test
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
 export OUTPUTFILESTRING=output_%04d.jpg
-
-ffmpeg -i inputs/${INPUTFILENAME} -r 0.1 outputs/${OUTPUTFILESTRING}
-
-
-# Docker test
 docker run --rm -v $PWD/assets:/inputs -v $PWD/assets:/outputs \
     linuxserver/ffmpeg \
-    -- -i inputs/${INPUTFILENAME} -r 0.1 outputs/${OUTPUTFILESTRING}
+    -i inputs/${INPUTFILENAME} -r 0.1 outputs/${OUTPUTFILESTRING}
 
 ## Bacalhau command
 bacalhau docker run \
@@ -53,33 +48,23 @@ bacalhau docker run \
 ```
 
 
-
-
-
 # Object detection with Yolo
 - Bacalhau docs example: https://docs.bacalhau.org/examples/model-inference/object-detection-yolo5/
 - Github: https://github.com/ultralytics/yolov5
 - Dockerhub: https://hub.docker.com/r/ultralytics/yolov5
 
 ```bash
-export INPUTFILENAME=output_0015.jpg
-
-# Local test
-pip install ultralytics
-git clone https://github.com/ultralytics/yolov5  # clone
-cd yolov5
-opip install -r requirements.txt
-pip3 install torch
-python detect.py --weights ../inputs/yolov5s-seg.pt --source ../outputs/${INPUTFILENAME} 
-# not yet working
-
-#docker run -it --rm -v  ultralytics/yolov5 /bin/bash
-
-docker run --rm -v $PWD/assets:/inputs -v $PWD/assets:/usr/src/app/outputs \
+export INPUTFILENAME=output_0005.jpg
+# Docker test
+docker run --rm -v $PWD/assets:/assets -v $PWD/assets:/usr/src/app/runs/detect \
     ultralytics/yolov5 \
-    python detect.py --weights /inputs/yolov5s-seg.pt --source /outputs/${INPUTFILENAME}
+    python detect.py --weights /assets/yolov5s-seg.pt \
+    --source /assets/${INPUTFILENAME} --name prelinger
 
-docker run --rm -it -v $PWD/assets:/inputs -v $PWD/assets:/usr/src/app/outputs \
+
+
+
+#docker run --rm -it -v $PWD/assets:/inputs -v $PWD/assets:/usr/src/app/outputs \
     ultralytics/yolov5 /bin/bash
 
 

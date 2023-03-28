@@ -39,6 +39,5 @@ gsutil cp Fridgidaire_Final_001_4444HQ_4096x3072.mov gs://prelinger
 gdown https://drive.google.com/uc?id=1TyR5nFLnVEp7XHZfaUKWFAE4ZzwNakZi
 #todo get this working
 
-ffmpeg -i Fridgidaire_Final_001_4444HQ_4096x3072.mov -vf scale=1400:1050  Fridgidaire_Final_001_4444HQ_1400x1050.mov 
-gcloud compute scp instance-1:/home/wes/Fridgidaire_Final_001_4444HQ_1400x1050.mov  ./Fridgidaire_Final_001_4444HQ_1400x1050.mov
+gcloud compute scp instance-1:/home/wes/prelinger-bacalhau/assets/prelinger2/*  ./ --zone=northamerica-northeast1-a
 
