@@ -36,7 +36,7 @@ export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
 export OUTPUTFILESTRING=output_%04d.jpg
 docker run --rm -v $PWD/assets:/inputs -v $PWD/assets:/outputs \
     linuxserver/ffmpeg \
-    -i inputs/${INPUTFILENAME} -r 0.1 outputs/${OUTPUTFILESTRING}
+    -i inputs/${INPUTFILENAME} -r 0.05 assets/frames/${OUTPUTFILESTRING}
 
 ## Bacalhau command
 bacalhau docker run \
@@ -48,13 +48,41 @@ bacalhau docker run \
 ```
 
 
-# Object detection with Yolo
+# Object detection with yolov5
+```bash
+# Local Test Setup
+pip install ultralytics
+
+# Local Test
+export INPUTFILENAME=output_0015.jpg
+yolo detect predict model=yolov8n.pt show=true save=true source="${PWD}/assets/${INPUTFILENAME}"
+#configuration
+
+# Docker Test
+docker run --rm -v $PWD/assets:/assets -v $PWD/assets:/usr/src/app/runs/prelinger \
+    ultralytics/yolov5 \
+    python detect.py --weights /assets/yolov5s-seg.pt \
+    --source /assets/${INPUTFILENAME} --name prelinger
+
+# Bacalhau Test
+
+
+```
+
+# Object detection with yolov5
 - Bacalhau docs example: https://docs.bacalhau.org/examples/model-inference/object-detection-yolo5/
 - Github: https://github.com/ultralytics/yolov5
 - Dockerhub: https://hub.docker.com/r/ultralytics/yolov5
 
 ```bash
-export INPUTFILENAME=output_0005.jpg
+#Local Test Setup
+git clone https://github.com/ultralytics/yolov5  # clone
+pip install -r yolov5/requirements.txt
+
+
+# Local Test
+export INPUTFILENAME=output_0015.jpg
+python yolov5/detect.py --weights /assets/yolov5s-seg.pt --source $PWD/assets/${INPUTFILENAME} --name prelinger
 # Docker test
 docker run --rm -v $PWD/assets:/assets -v $PWD/assets:/usr/src/app/runs/detect \
     ultralytics/yolov5 \
