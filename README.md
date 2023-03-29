@@ -31,9 +31,13 @@ bacalhau docker run \
 
 # Export screenshot images every 5 seconds
 ```bash
-# Docker test
+# Local Test
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
 export OUTPUTFILESTRING=output_%04d.jpg
+
+ffmpeg -i assets/videos/${INPUTFILENAME} -r 0.05 assets/frames/${OUTPUTFILESTRING}
+
+# Docker test
 docker run --rm -v $PWD/assets:/inputs -v $PWD/assets:/outputs \
     linuxserver/ffmpeg \
     -i inputs/${INPUTFILENAME} -r 0.05 assets/frames/${OUTPUTFILESTRING}
@@ -55,16 +59,28 @@ pip install ultralytics
 
 # Local Test
 export INPUTFILENAME=output_0015.jpg
-yolo detect predict model=yolov8n.pt show=true save=true source="${PWD}/assets/${INPUTFILENAME}"
-#configuration
+yolo detect predict model=yolov8n.pt save=true source="${PWD}/assets/frames"
 
-# Docker Test
-docker run --rm -v $PWD/assets:/assets -v $PWD/assets:/usr/src/app/runs/prelinger \
-    ultralytics/yolov5 \
-    python detect.py --weights /assets/yolov5s-seg.pt \
-    --source /assets/${INPUTFILENAME} --name prelinger
+# Docker-Mac Test
+#Note the /predict folder is incremented via detect.py so the output folder path needs to be managed creatively
+docker run --rm -v $PWD/assets:/assets \
+    -v $PWD/assets/predictions:/predict \
+    ultralytics/ultralytics:latest-arm64 \
+    yolo detect predict model=yolov8n.pt save=true source="/assets/frames/${INPUTFILENAME}" && \
+    cp /usr/src/ultralytics/runs/detect/predict/* /predict
 
 # Bacalhau Test
+
+
+export INPUTCID=bafkreidbrvycmzaqdguf2s4icej73rguvwqgfcjokghey3ppexjxbuvplm
+
+bacalhau docker run \
+    -v bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy:/assets/${INPUTFILENAME} \
+    -o predictions:/predict \
+    --id-only \
+    ultralytics/ultralytics \
+    -- yolo detect predict model=yolov8n.pt save=true source="/assets/${INPUTFILENAME}" && cp /usr/src/ultralytics/runs/detect/predict/* /predict
+
 
 
 ```
