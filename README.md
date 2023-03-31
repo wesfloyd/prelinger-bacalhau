@@ -77,7 +77,7 @@ export INPUTCID=bafkreidbrvycmzaqdguf2s4icej73rguvwqgfcjokghey3ppexjxbuvplm
 bacalhau docker run \
     -v bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy:/assets/${INPUTFILENAME} \
     -o predictions:/predict \
-    --id-only \
+    --id-only --network=full \
     ultralytics/ultralytics \
     -- yolo detect predict model=yolov8n.pt save=true source="/assets/${INPUTFILENAME}" && cp /usr/src/ultralytics/runs/detect/predict/* /predict
 
@@ -105,23 +105,8 @@ docker run --rm -v $PWD/assets:/assets -v $PWD/assets:/usr/src/app/runs/detect \
     python detect.py --weights /assets/yolov5s-seg.pt \
     --source /assets/${INPUTFILENAME} --name prelinger
 
-
-
-
-#docker run --rm -it -v $PWD/assets:/inputs -v $PWD/assets:/usr/src/app/outputs \
-    ultralytics/yolov5 /bin/bash
-
-
-
-# example command from docs
-python segment/predict.py --weights yolov5m-seg.pt --data data/images/bus.jpg
-
-#code: https://github.com/ultralytics/yolov5/tree/master/segment
-
-
---input-urls https://github.com/ultralytics/yolov5/releases/download/v6.2/yolov5s.pt \
-ultralytics/yolov5:v6.2 \
--- /bin/bash -c 'find /inputs -type f -exec cp {} /outputs/yolov5s.pt \; ; python detect.py --weights /outputs/yolov5s.pt --source $(pwd)/data/images --project /outputs'
+#Bacalhau test
+#todo
 ```
 
 
@@ -129,8 +114,8 @@ ultralytics/yolov5:v6.2 \
 
 # Easy OCR
 - Bacalhau example: https://docs.bacalhau.org/examples/model-inference/EasyOCR/
-
 ```bash
+#todo
 
 ```
 
