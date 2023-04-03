@@ -1,22 +1,22 @@
 # Prelinger Decentralized Video Processing Pipeline with Project Bacalhau
-https://archive.org/details/prelinger
-https://bacalhau.org/
+- https://archive.org/details/prelinger
+- https://bacalhau.org/
 
-# Scale with ffmpeg - Local Docker Test
+# Scale video resolution with ffmpeg
 ```bash
 
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
 export OUTPUTFILENAME=Fridgidaire_Final_001_4444HQ_150x100.mov
 mkdir -p outputs
 
+#Local Docker test
 docker run --rm -v $PWD/assets:/inputs -v $PWD/assets:/outputs\
     linuxserver/ffmpeg \
     -i /inputs/${INPUTFILENAME} -vf scale=150:100 \
     /outputs/${OUTPUTFILENAME}
 
-# Interactive: mode docker run --rm -it -v $PWD/assets:/inputs --entrypoint /bin/bash linuxserver/ffmpeg
 
-# Scale with ffmpeg - On Bacalhau
+# Bacalhau test
 # inputs folder IPFS CID: bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy
 
 bacalhau docker run \
