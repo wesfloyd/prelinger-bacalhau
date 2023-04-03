@@ -110,14 +110,6 @@ docker run --rm -v "$PWD":/app -w /app clearlinux/tesseract-ocr tesseract xxx.ti
 
 ```
 
-# todo: revisit the pipeline concept
 
 
 # Appendix
-
-#Convert
-#todo? ffmpeg -i my-video.mov -vcodec h264 -acodec mp2 my-video.mp4
-#Trim
-#ffmpeg -i input.mp4 -ss 00:05:20 -t 00:10:00 -c:v copy -c:a copy output1.mp4
-#Probe the file's resolutions
-#ffprobe <input-file>
