@@ -33,9 +33,15 @@ bacalhau docker run \
 ```bash
 # Local Test
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
-export OUTPUTFILESTRING=output_%04d.jpg
+export OUTPUTFILESTRING=Frigidaire_%04d.jpg
 
 ffmpeg -i assets/videos/${INPUTFILENAME} -r 0.05 assets/frames/${OUTPUTFILESTRING}
+
+export INPUTFILENAME=Japanese1943.mp4
+export OUTPUTFILESTRING=Japanese1943_%04d.jpg
+
+ffmpeg -i assets/videos/${INPUTFILENAME} -r 0.025 assets/frames/${OUTPUTFILESTRING}
+
 
 # Docker test
 docker run --rm -v $PWD/assets:/inputs -v $PWD/assets:/outputs \
@@ -112,10 +118,20 @@ docker run --rm -v $PWD/assets:/assets -v $PWD/assets:/usr/src/app/runs/detect \
 
 
 
-# Easy OCR
-- Bacalhau example: https://docs.bacalhau.org/examples/model-inference/EasyOCR/
+# Tesseract
 ```bash
-#todo
+
+#Install on Mac
+brew install tesseract
+
+#Local test
+export INPUTFILENAME=Japanese1943_0004.jpg
+tesseract $PWD/assets/frames/${INPUTFILENAME} ${INPUTFILENAME}_ocr
+
+#Docker test 
+
+docker run --rm -v "$PWD":/app -w /app clearlinux/tesseract-ocr tesseract xxx.tiff stdout --oem 1
+#todo working here
 
 ```
 
