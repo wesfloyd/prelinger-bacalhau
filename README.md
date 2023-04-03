@@ -58,7 +58,7 @@ bacalhau docker run \
 ```
 
 
-# Object detection with yolov5
+# Object detection with yolov8
 ```bash
 # Local Test Setup
 pip install ultralytics
@@ -87,32 +87,6 @@ bacalhau docker run \
     ultralytics/ultralytics \
     -- yolo detect predict model=yolov8n.pt save=true source="/assets/${INPUTFILENAME}" && cp /usr/src/ultralytics/runs/detect/predict/* /predict
 
-
-
-```
-
-# Object detection with yolov5
-- Bacalhau docs example: https://docs.bacalhau.org/examples/model-inference/object-detection-yolo5/
-- Github: https://github.com/ultralytics/yolov5
-- Dockerhub: https://hub.docker.com/r/ultralytics/yolov5
-
-```bash
-#Local Test Setup
-git clone https://github.com/ultralytics/yolov5  # clone
-pip install -r yolov5/requirements.txt
-
-
-# Local Test
-export INPUTFILENAME=output_0015.jpg
-python yolov5/detect.py --weights /assets/yolov5s-seg.pt --source $PWD/assets/${INPUTFILENAME} --name prelinger
-# Docker test
-docker run --rm -v $PWD/assets:/assets -v $PWD/assets:/usr/src/app/runs/detect \
-    ultralytics/yolov5 \
-    python detect.py --weights /assets/yolov5s-seg.pt \
-    --source /assets/${INPUTFILENAME} --name prelinger
-
-#Bacalhau test
-#todo
 ```
 
 
@@ -123,6 +97,7 @@ docker run --rm -v $PWD/assets:/assets -v $PWD/assets:/usr/src/app/runs/detect \
 
 #Install on Mac
 brew install tesseract
+# CLI docs https://tesseract-ocr.github.io/tessdoc/Command-Line-Usage.html
 
 #Local test
 export INPUTFILENAME=Japanese1943_0004.jpg
