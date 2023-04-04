@@ -7,18 +7,17 @@
 
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
 export OUTPUTFILENAME=Fridgidaire_Final_001_4444HQ_150x100.mov
-mkdir -p outputs
 
-#Local Docker test
-docker run --rm -v $PWD/assets:/inputs -v $PWD/assets:/outputs\
+#Local Docker test on Mac
+docker run --rm -v $PWD/assets/videos:/inputs -v $PWD/assets/videos:/outputs\
     linuxserver/ffmpeg \
     -i /inputs/${INPUTFILENAME} -vf scale=150:100 \
     /outputs/${OUTPUTFILENAME}
 
 
 # Bacalhau test
-# inputs folder IPFS CID: bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy
-
+# inputs folder IPFS CID for Fridgidaire_Final_001_4444HQ_800x600.mov: bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy
+# https://api.estuary.tech/gw/ipfs/bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy
 bacalhau docker run \
     -v bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy:/inputs \
     --id-only\
@@ -29,7 +28,7 @@ bacalhau docker run \
 ```
 
 
-# Export screenshot images every 5 seconds
+# Export screenshot images (frames) with ffmpeg
 ```bash
 # Local Test
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
@@ -44,11 +43,14 @@ ffmpeg -i assets/videos/${INPUTFILENAME} -r 0.025 assets/frames/${OUTPUTFILESTRI
 
 
 # Docker test
-docker run --rm -v $PWD/assets:/inputs -v $PWD/assets:/outputs \
+export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
+export OUTPUTFILESTRING=Frigidaire_%04d.jpg
+docker run --rm -v $PWD/assets/videos:/inputs -v $PWD/assets/frames:/outputs \
     linuxserver/ffmpeg \
-    -i inputs/${INPUTFILENAME} -r 0.05 assets/frames/${OUTPUTFILESTRING}
+    -i inputs/${INPUTFILENAME} -r 0.05 /outputs/${OUTPUTFILESTRING}
 
 ## Bacalhau command
+# inputs folder IPFS CID for Fridgidaire_Final_001_4444HQ_800x600.mov: bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy
 bacalhau docker run \
     -v bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy:/inputs \
     --id-only\
@@ -63,16 +65,17 @@ bacalhau docker run \
 # Local Test Setup
 pip install ultralytics
 
-# Local Test
+# Local Test on mac
 export INPUTFILENAME=output_0015.jpg
-yolo detect predict model=yolov8n.pt save=true source="${PWD}/assets/frames"
+yolo detect predict model=$PWD/assets/yolov8n.pt save=true source="${PWD}/assets/frames"
 
 # Docker-Mac Test
 #Note the /predict folder is incremented via detect.py so the output folder path needs to be managed creatively
+export INPUTFILENAME=Frigidaire_0004.jpg
 docker run --rm -v $PWD/assets:/assets \
     -v $PWD/assets/predictions:/predict \
     ultralytics/ultralytics:latest-arm64 \
-    yolo detect predict model=yolov8n.pt save=true source="/assets/frames/${INPUTFILENAME}" && \
+    yolo detect predict save=true source="/assets/frames/${INPUTFILENAME}" && \
     cp /usr/src/ultralytics/runs/detect/predict/* /predict
 
 # Bacalhau Test
@@ -83,14 +86,15 @@ bacalhau docker run \
     -o predictions:/predict \
     --id-only --network=full \
     ultralytics/ultralytics \
-    -- yolo detect predict model=yolov8n.pt save=true source="/assets/${INPUTFILENAME}" && cp /usr/src/ultralytics/runs/detect/predict/* /predict
+    -- yolo detect predict save=true source="/assets/${INPUTFILENAME}" && cp /usr/src/ultralytics/runs/detect/predict/* /predict
+    #todo get this working
 
 ```
 
 
 
 
-# Tesseract
+# OCR with tesseract
 ```bash
 
 #Install on Mac
