@@ -76,8 +76,6 @@ docker run --rm -v $PWD/assets:/assets \
     cp /usr/src/ultralytics/runs/detect/predict/* /predict
 
 # Bacalhau Test
-
-
 export INPUTCID=bafkreidbrvycmzaqdguf2s4icej73rguvwqgfcjokghey3ppexjxbuvplm
 
 bacalhau docker run \
@@ -100,13 +98,17 @@ brew install tesseract
 # CLI docs https://tesseract-ocr.github.io/tessdoc/Command-Line-Usage.html
 
 #Local test
-export INPUTFILENAME=Japanese1943_0004.jpg
+export INPUTFILENAME=Japanese1943_0003.jpg
 tesseract $PWD/assets/frames/${INPUTFILENAME} ${INPUTFILENAME}_ocr
 
 #Docker test 
-
-docker run --rm -v "$PWD":/app -w /app clearlinux/tesseract-ocr tesseract xxx.tiff stdout --oem 1
+docker run --rm -v $PWD/assets/frames/${INPUTFILENAME}:/app -w /app clearlinux/tesseract-ocr tesseract xxx.tiff stdout --oem 1
 #todo working here
+
+#Bacalhau test
+export INPUTCID=bafkreihaumtvwjxqb4dhxdrf44mte5jj6b6zs6hngji63mzxjv27ek6zn4
+
+
 
 ```
 
