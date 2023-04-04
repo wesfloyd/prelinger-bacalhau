@@ -3,12 +3,11 @@
 - https://bacalhau.org/
 
 # Scale video resolution with ffmpeg
+![alt text](assets/frames/Frigidaire_0006.jpg "Frigidaire")
 ```bash
-
+#Local Docker test on Mac
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
 export OUTPUTFILENAME=Fridgidaire_Final_001_4444HQ_150x100.mov
-
-#Local Docker test on Mac
 docker run --rm -v $PWD/assets/videos:/inputs -v $PWD/assets/videos:/outputs\
     linuxserver/ffmpeg \
     -i /inputs/${INPUTFILENAME} -vf scale=150:100 \
@@ -61,6 +60,7 @@ bacalhau docker run \
 
 
 # Object detection with yolov8
+![alt text](assets/predictions/Japanese1943_0004.jpg "Japanese1943")
 ```bash
 # Local Test Setup
 pip install ultralytics
@@ -95,6 +95,11 @@ bacalhau docker run \
 
 
 # OCR with tesseract
+
+![alt text](assets/frames/Japanese1943_0003.jpg "Japanese1943 OCR")
+OCR Text:
+>the operation, as carried out by the United States Army and the War Relocation Authority. The narrator is Milton S. Eisenhower, who was director of the War Relocation Authority
+
 ```bash
 
 #Install on Mac
