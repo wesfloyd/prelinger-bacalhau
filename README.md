@@ -71,24 +71,24 @@ yolo detect predict model=$PWD/assets/yolov8n.pt save=true source="${PWD}/assets
 
 # Docker-Mac Test
 #Note the /predict folder is incremented via detect.py so the output folder path needs to be managed creatively
-export INPUTFILENAME=Frigidaire_0004.jpg
 docker run --rm -v $PWD/assets:/assets \
-    -v $PWD/assets/predictions:/predict \
+    -v $PWD/assets/predictions:/usr/src/ultralytics/runs/detect/predict/ \
     ultralytics/ultralytics:latest-arm64 \
-    yolo detect predict save=true source="/assets/frames/${INPUTFILENAME}" && \
-    cp /usr/src/ultralytics/runs/detect/predict/* /predict
+    yolo detect predict save=true exist_ok=true source='/assets/frames/Frigidaire_0004.jpg'
+
 
 # Bacalhau Test
 export INPUTCID=bafkreidbrvycmzaqdguf2s4icej73rguvwqgfcjokghey3ppexjxbuvplm
+# IPFS URL: https://gateway.estuary.tech/gw/ipfs/bafkreidbrvycmzaqdguf2s4icej73rguvwqgfcjokghey3ppexjxbuvplm 
 
 bacalhau docker run \
-    -v bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy:/assets/${INPUTFILENAME} \
-    -o predictions:/predict \
+    -v bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy:/assets/output_0015.jpg \
+    -o predictions:/usr/src/ultralytics/runs/detect/predict/ \
     --id-only --network=full \
     ultralytics/ultralytics \
-    -- yolo detect predict save=true source="/assets/${INPUTFILENAME}" && cp /usr/src/ultralytics/runs/detect/predict/* /predict
-    #todo get this working
+    yolo detect predict save=true exist_ok=true source='/assets/output_0015.jpg'
 
+# todo open http allowlist for github
 ```
 
 
@@ -108,19 +108,44 @@ brew install tesseract
 
 #Local test
 export INPUTFILENAME=Japanese1943_0003.jpg
-tesseract $PWD/assets/frames/${INPUTFILENAME} ${INPUTFILENAME}_ocr
+tesseract $PWD/assets/frames/${INPUTFILENAME} assets/ocr/${INPUTFILENAME}_ocr
 
 #Docker test 
-docker run --rm -v $PWD/assets/frames/${INPUTFILENAME}:/app -w /app clearlinux/tesseract-ocr tesseract xxx.tiff stdout --oem 1
-#todo working here
+export INPUTFILENAME=Japanese1943_0003.jpg
+docker run --rm -v $PWD/assets/frames/${INPUTFILENAME}:/app/${INPUTFILENAME} \
+    -v $PWD/assets/ocr:/outputs  \
+    -w /app wesfloyd/tesseract-ocr tesseract /app/${INPUTFILENAME} /outputs/${INPUTFILENAME}_docker_ocr --oem 1
 
 #Bacalhau test
 export INPUTCID=bafkreihaumtvwjxqb4dhxdrf44mte5jj6b6zs6hngji63mzxjv27ek6zn4
+export INPUTFILENAME=Japanese1943_0003.jpg
 
-
+bacalhau docker run \
+    -v bafkreihaumtvwjxqb4dhxdrf44mte5jj6b6zs6hngji63mzxjv27ek6zn4:/inputs \
+    --id-only\
+    wesfloyd/tesseract-ocr \
+    
+#todo
 
 ```
 
 
 
 # Appendix
+
+## Modifying docker containers
+```bash
+docker run -it clearlinux/tesseract-ocr /bin/bash
+#swupd bundle-add git
+#git clone https://github.com/tesseract-ocr/tessdata
+swupd bundle-add wget
+wget https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata
+cp eng.traineddata /usr/share/tessdata/
+exit
+sudo docker ps -l
+sudo docker commit [containerid] wesfloyd/tesseract-ocr
+sudo docker push wesfloyd/tesseract-ocr
+
+
+
+```
