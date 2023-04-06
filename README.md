@@ -11,7 +11,9 @@ References:
 
 <p align="center">
     <img src="assets/frames/Frigidaire_0006.jpg" alt=".." width="400"/>
-  </p>
+  </p> 
+
+
 ```bash
 # Local Docker test on Mac
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
@@ -70,6 +72,7 @@ bacalhau docker run \
 <p align="center">
     <img src="assets/predictions/Japanese1943_0004.jpg" alt=".." width="400"/>
   </p>
+
 ```bash
 # Local Test Setup
 pip install ultralytics
@@ -108,7 +111,7 @@ bacalhau docker run \
 <p align="center">
     <img src="assets/frames/Japanese1943_0003.jpg" alt=".." width="400"/>
   </p>
-  
+
 OCR Text:
 >the operation, as carried out by the United States Army and the War Relocation Authority. The narrator is Milton S. Eisenhower, who was director of the War Relocation Authority
 
@@ -145,7 +148,7 @@ bacalhau docker run \
 
 # Appendix
 
-## Modifying docker containers
+## Modifying docker containers to install tesseract english language file
 ```bash
 docker run -it clearlinux/tesseract-ocr /bin/bash
 #swupd bundle-add git
