@@ -15,6 +15,12 @@ References:
 
 
 ```bash
+
+# Local ffmpeg test
+export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
+export OUTPUTFILENAME=Fridgidaire_Final_001_4444HQ_150x100.mov
+ffmpeg -i $PWD/assets/videos/${INPUTFILENAME} -vf scale=150:100 $PWD/assets/videos/${OUTPUTFILENAME}
+
 # Local Docker test on Mac
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
 export OUTPUTFILENAME=Fridgidaire_Final_001_4444HQ_150x100.mov
@@ -26,6 +32,8 @@ docker run --rm -v $PWD/assets/videos:/inputs -v $PWD/assets/videos:/outputs\
 # Bacalhau
 # inputs folder IPFS CID for Fridgidaire_Final_001_4444HQ_800x600.mov: bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy
 # https://api.estuary.tech/gw/ipfs/bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy
+export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
+export OUTPUTFILENAME=Fridgidaire_Final_001_4444HQ_150x100.mov
 bacalhau docker run \
     -v bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy:/inputs \
     --id-only\
@@ -59,6 +67,8 @@ docker run --rm -v $PWD/assets/videos:/inputs -v $PWD/assets/frames:/outputs \
 
 ## Bacalhau command
 # inputs folder IPFS CID for Fridgidaire_Final_001_4444HQ_800x600.mov: bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy
+export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
+export OUTPUTFILESTRING=Frigidaire_%04d.jpg
 bacalhau docker run \
     -v bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy:/inputs \
     --id-only\
