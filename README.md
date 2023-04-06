@@ -1,11 +1,19 @@
-# Prelinger Decentralized Video Processing Pipeline with Project Bacalhau
-- https://archive.org/details/prelinger
-- https://bacalhau.org/
+# Prelinger Decentralized Video Processing Pipeline
+<p align="center">
+    <img src="assets/Prelinger_Collection_logo.svg.png" alt=".." width="200"/>
+  </p>
+
+References:
+* https://archive.org/details/prelinger
+* https://bacalhau.org/
 
 # Scale video resolution with ffmpeg
-![alt text](assets/frames/Frigidaire_0006.jpg "Frigidaire")
+
+<p align="center">
+    <img src="assets/frames/Frigidaire_0006.jpg" alt=".." width="400"/>
+  </p>
 ```bash
-#Local Docker test on Mac
+# Local Docker test on Mac
 export INPUTFILENAME=Fridgidaire_Final_001_4444HQ_800x600.mov
 export OUTPUTFILENAME=Fridgidaire_Final_001_4444HQ_150x100.mov
 docker run --rm -v $PWD/assets/videos:/inputs -v $PWD/assets/videos:/outputs\
@@ -13,8 +21,7 @@ docker run --rm -v $PWD/assets/videos:/inputs -v $PWD/assets/videos:/outputs\
     -i /inputs/${INPUTFILENAME} -vf scale=150:100 \
     /outputs/${OUTPUTFILENAME}
 
-
-# Bacalhau test
+# Bacalhau
 # inputs folder IPFS CID for Fridgidaire_Final_001_4444HQ_800x600.mov: bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy
 # https://api.estuary.tech/gw/ipfs/bafybeihjplsav7f4lr4evqry4vka6j7kghhmwi4jcnmqazuwpnyid72buy
 bacalhau docker run \
@@ -60,7 +67,9 @@ bacalhau docker run \
 
 
 # Object detection with yolov8
-![alt text](assets/predictions/Japanese1943_0004.jpg "Japanese1943")
+<p align="center">
+    <img src="assets/predictions/Japanese1943_0004.jpg" alt=".." width="400"/>
+  </p>
 ```bash
 # Local Test Setup
 pip install ultralytics
@@ -96,7 +105,10 @@ bacalhau docker run \
 
 # OCR with tesseract
 
-![alt text](assets/frames/Japanese1943_0003.jpg "Japanese1943 OCR")
+<p align="center">
+    <img src="assets/frames/Japanese1943_0003.jpg" alt=".." width="400"/>
+  </p>
+  
 OCR Text:
 >the operation, as carried out by the United States Army and the War Relocation Authority. The narrator is Milton S. Eisenhower, who was director of the War Relocation Authority
 
